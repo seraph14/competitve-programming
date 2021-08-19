@@ -8,33 +8,15 @@ public class InsertionSort {
     }
 
     public static void insertionSort(int[] arr) {
-        int lastSortedIndex = 0;
-        int temp;
-        for (int j = 1; j < arr.length; j++) {
-            temp = arr[lastSortedIndex+1];
-            for (int i = lastSortedIndex; i >= 0; i--) {
-                if (arr[i] > temp) {
-                    lastSortedIndex++;
-                    swap(i, i+1, arr);
-                } else {
-                    insert(lastSortedIndex, j, arr);
-                    lastSortedIndex++;
-                    break;
-                }
+        int current, j;
+        for (int i = 1; i < arr.length; i++) {
+            current = arr[i];
+            j = i - 1;
+            while (j >= 0 && arr[j] > current) {
+                arr[j+1] = arr[j];
+                j--;
             } 
-            lastSortedIndex = j;
+            arr[j + 1] = current; 
         }
-    }
-
-    public static void swap(int left, int right, int[] arr) {
-        int temp = arr[left];
-        arr[left] = arr[right];
-        arr[right] = temp;
-    }
-
-    public static void insert(int insertIndex, int elemIndex, int[] arr) {
-        for (int i = elemIndex; i > insertIndex; i--) {
-            swap(i, i-1, arr);
-        } 
     }
 }
