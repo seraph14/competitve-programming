@@ -20,93 +20,32 @@ class Solution {
             
             int mines = 0;
             int[][] unrevealed = new int[8][2];
-            int i = 0;
-            if (row + 1 < board.length) {
-                if (col + 1 < board[row].length) {
-                    if (board[row+1][col+1] == 'M') {
+            int count = 0, r, c;
+            for (int i = -1; i < 2; i++) {
+                for (int j = -1; j < 2; j++) {
+                    if (i == 0 && j == 0) continue;
+                    r = row + i;
+                    c = col + j;
+                    if (r < 0 || c < 0 || r >= board.length || c >= board[row].length) 
+                        continue;
+                    
+                    if (board[r][c] == 'M') {
                         mines++;
-                    } else if (board[row+1][col+1] == 'E') {
-                        unrevealed[i][0] = row+1;
-                        unrevealed[i][1] = col+1;
-                        i++;
+                    } else if (board[r][c] == 'E') {
+                        unrevealed[count][0] = r;
+                        unrevealed[count][1] = c;
+                        count++;
                     } 
-                }
-
-                if (col - 1 >= 0) {
-                    if (board[row+1][col-1] == 'M') {
-                        mines++;
-                    } else if (board[row+1][col-1] == 'E') {
-                        unrevealed[i][0] = row+1;
-                        unrevealed[i][1] = col-1;
-                        i++;
-                    } 
-                }
-
-                if (board[row+1][col] == 'M') {
-                    mines++;
-                } else if (board[row+1][col] == 'E') {
-                    unrevealed[i][0] = row+1;
-                    unrevealed[i][1] = col;
-                    i++;
+                    
                 }
             }
-
-            if (row - 1 >= 0) {
-                if (col + 1 < board[row].length) {
-                    if (board[row-1][col+1] == 'M') {
-                        mines++;
-                    } else if (board[row-1][col+1] == 'E') {
-                        unrevealed[i][0] = row-1;
-                        unrevealed[i][1] = col+1;
-                        i++;
-                    } 
-                }
-
-                if (col - 1 >= 0) {
-                    if (board[row-1][col-1] == 'M') {
-                        mines++;
-                    } else if (board[row-1][col-1] == 'E') {
-                        unrevealed[i][0] = row-1;
-                        unrevealed[i][1] = col-1;
-                        i++;
-                    } 
-                }
-                if (board[row-1][col] == 'M') {
-                    mines++;
-                } else if (board[row-1][col] == 'E') {
-                    unrevealed[i][0] = row-1;
-                    unrevealed[i][1] = col;
-                    i++;
-                }
-            }
-
-            if (col + 1 < board[row].length) {
-                if (board[row][col+1] == 'M') {
-                    mines++;
-                } else if (board[row][col+1] == 'E') {
-                    unrevealed[i][0] = row;
-                    unrevealed[i][1] = col+1;
-                    i++;
-                }
-            }
-
-            if (col - 1 >= 0) {
-                if (board[row][col-1] == 'M') {
-                    mines++;
-                } else if (board[row][col-1] == 'E') {
-                    unrevealed[i][0] = row;
-                    unrevealed[i][1] = col-1;
-                    i++;
-                }
-            }
-
 
 
             if (mines > 0) {
                 board[row][col] = (char) (mines + '0');
             } else {
                 board[row][col] = 'B';
-                for (int j = 0; j < i; j++) {
+                for (int j = 0; j < count; j++) {
                     temp = new ArrayList<>(2);
                     temp.add(unrevealed[j][0]);
                     temp.add(unrevealed[j][1]);
