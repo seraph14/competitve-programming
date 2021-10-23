@@ -1,53 +1,39 @@
 class Solution {
     public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
-        int row = sr, col = sc;
-        int m = image.length, n = image[0].length;
+        
         int oldColor = image[sr][sc];
         if (oldColor == newColor) return image;
-        Stack<List<Integer>> stack = new Stack<>();
-        List<Integer> temp = new ArrayList<>();
-        temp.add(sr);
-        temp.add(sc);
-        stack.push(temp);
+        
+        Stack<int[]> stack = new Stack<>();
+        stack.push(new int[] {sr, sc});
+        
+        int[][] directions = new int[][] {{-1, 0}, {0, -1}, {1, 0}, {0, 1}};
+        int[] temp;
+        int row, col;
         while (!stack.isEmpty()) {
             temp = stack.pop();
-            if (temp == null) continue;
+            row = temp[0];
+            col = temp[1];
             
-            row = temp.get(0);
-            col = temp.get(1);
+            image[row][col] = newColor;
             
-            System.out.println(row + " " + col);
-            if (image[row][col] == oldColor) {
-                image[row][col] = newColor;
+            for (int[] direction : directions) {
+                int newRow = direction[0] + row;
+                int newCol = direction[1] + col;
+                
+                if (isValidMove(newRow, newCol, image, oldColor)) 
+                    stack.push(new int[] {newRow, newCol});
             }
-            
-            if (row + 1 < m && image[row+1][col] == oldColor) {
-                temp = new ArrayList<>();
-                temp.add(row + 1);
-                temp.add(col);
-                stack.push(temp);
-            } 
-            if (col + 1 < n && image[row][col+1] == oldColor) {
-                temp = new ArrayList<>();
-                temp.add(row);
-                temp.add(col + 1);
-                stack.push(temp);
-            } 
-            if (row - 1 >= 0 && image[row-1][col] == oldColor) {
-                temp = new ArrayList<>();
-                temp.add(row - 1);
-                temp.add(col);
-                stack.push(temp);
-            } 
-            if (col - 1 >= 0 && image[row][col-1] == oldColor) {
-                temp = new ArrayList<>();
-                temp.add(row);
-                temp.add(col - 1);
-                stack.push(temp);
-            } 
         }
         
         return image;
         
+    }
+    
+    public boolean isValidMove(int newRow, int newCol, int[][] image, int oldColor) {
+        int m = image.length;
+        int n = image[0].length;
+        return !(newRow < 0 || newRow >= m || newCol < 0 || newCol >= n) &&
+            image[newRow][newCol] == oldColor;
     }
 }
